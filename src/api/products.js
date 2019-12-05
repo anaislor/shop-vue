@@ -5,6 +5,9 @@ const service = axios.create({
 
 export default {
   getAllProducts: () => {
-    return service.get(res => res.data).catch(err => err);
+    return service
+      .get()
+      .then(res => res.data)
+      .catch(err => err);
   }
 };
