@@ -1,6 +1,5 @@
 <template>
   <div id="shop">
-    <!-- eslint-disable -->
     <h1>Shop</h1>
     <ul>
       <Product
@@ -40,4 +39,9 @@ export default {
 </script>
 
 <style>
+#shop h1 {
+  font-size: 40px;
+  text-align: center;
+  width: 100%;
+}
 </style>
