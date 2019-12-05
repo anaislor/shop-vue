@@ -7,15 +7,30 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     products: [],
-    basket: []
+    basket: [],
+    totalPages: 0,
+    currentPage: 1
   },
   getters: {
-    products: state => state.products,
+    products: state => state.products.splice(state.currentPage - 1, 15),
     basket: state => state.basket
   },
   //pour accéder à une valeur du store n'importe ou (on peut la filter la filter ...)
   mutations: {
-    setProducts: (state, value) => (state.products = value.splice(0, 20)),
+    setPages: (state, value) => (state.totalPages = value),
+    setProducts: (state, value) => (state.products = value),
+    firstPage: state => (
+      (state.currentPage = 1), console.log(state.currentPage)
+    ),
+    nextPage: state => {
+      (state.currentPage += 1), console.log(state.currentPage);
+    },
+    previousPage: state => {
+      (state.currentPage -= 1), console.log(state.currentPage);
+    },
+    lastPage: state => (
+      (state.currentPage = state.totalPages), console.log(state.currentPage)
+    ),
     addProduct: (state, id) =>
       state.basket.push(state.products.filter(p => p.id === id)[0]),
     removeProduct: (state, id) =>
@@ -28,7 +43,10 @@ export default new Vuex.Store({
   //mutation permet de modifier le state dans le store
   actions: {
     getAllProducts: ({ commit }) => {
-      shopApi.getAllProducts().then(res => commit("setProducts", res));
+      shopApi.getAllProducts().then(res => {
+        commit("setProducts", res);
+        commit("setPages", Math.round(res.length / 15));
+      });
     }
   },
   //commit = le type de mutation, les actions ne modifient pas l'état mais actent des mutations
